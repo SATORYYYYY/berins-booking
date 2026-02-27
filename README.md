@@ -21,5 +21,5 @@
 ### 1. Клонируем репозиторий
 
 ```bash
-git clone https://github.com/yourusername/berins-booking.git
-cd berins-booking
+git clone https://github.com/SATORYYYYY/berins-booking.git
+cd kurs-karina
