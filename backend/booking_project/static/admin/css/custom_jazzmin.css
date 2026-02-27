@@ -1,0 +1,42 @@
+:root {
+    --berins-primary: #b85e2c;
+    --berins-secondary: #4a6fa5;
+    --berins-accent: #f5e6d3;
+}
+
+.navbar-brand {
+    font-family: 'Playfair Display', serif !important;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.user-menu .dropdown-toggle::after {
+    display: none;
+}
+
+.btn-primary {
+    background: var(--berins-primary) !important;
+    border-color: var(--berins-primary) !important;
+}
+
+.btn-primary:hover {
+    background: #a04d1f !important;
+    border-color: #a04d1f !important;
+}
+
+.card {
+    border-radius: 16px !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05) !important;
+}
+
+.table thead th {
+    background: var(--berins-accent);
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.main-footer {
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    color: #6c757d;
+}
