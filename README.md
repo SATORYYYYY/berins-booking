@@ -23,3 +23,4 @@
 ```bash
 git clone https://github.com/SATORYYYYY/berins-booking.git
 cd berins-booking
+cd kurs-karina
