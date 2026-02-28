@@ -29,7 +29,6 @@ const CanvasOverlay = ({ tables, bookings, filters, onTableSelect, maxX, maxY })
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const [particles, setParticles] = useState([]);
-  const containerRef = useRef(null);
 
   useEffect(() => {
     const newParticles = [];
@@ -114,7 +113,6 @@ const CanvasOverlay = ({ tables, bookings, filters, onTableSelect, maxX, maxY })
       } else {
         ctx.fillStyle = booked ? '#d32f2f' : '#2e7d32';
         ctx.fillRect(x - 35, y - 20, 70, 40);
-        // Блик
         ctx.fillStyle = 'rgba(255,255,255,0.15)';
         ctx.fillRect(x - 30, y - 15, 60, 10);
       }
@@ -204,23 +202,29 @@ const CanvasOverlay = ({ tables, bookings, filters, onTableSelect, maxX, maxY })
   );
 };
 
-const TableMap = ({ filters, onTableSelect }) => {
+const TableMap = ({ filters, onTableSelect, restaurantId }) => {
   const [tables, setTables] = useState([]);
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/tables/')
-      .then(res => setTables(res.data))
-      .catch(err => console.error(err));
-  }, []);
+    if (restaurantId) {
+      axios.get(`http://localhost:8000/api/tables/?restaurant=${restaurantId}`)
+        .then(res => setTables(res.data))
+        .catch(err => console.error(err));
+    }
+  }, [restaurantId]);
 
   useEffect(() => {
-    if (filters.date) {
-      axios.get(`http://localhost:8000/api/bookings/?date=${filters.date}`)
+    if (filters.date && restaurantId) {
+      axios.get(`http://localhost:8000/api/bookings/?date=${filters.date}&restaurant=${restaurantId}`)
         .then(res => setBookings(res.data))
         .catch(err => console.error(err));
     }
-  }, [filters.date]);
+  }, [filters.date, restaurantId]);
+
+  const filteredTables = tables.filter(table =>
+    !filters.capacity || table.capacity >= filters.capacity
+  );
 
   const maxX = Math.max(...tables.map(t => t.pos_x || 0), 800);
   const maxY = Math.max(...tables.map(t => t.pos_y || 0), 500);
@@ -230,26 +234,26 @@ const TableMap = ({ filters, onTableSelect }) => {
       <Box sx={{ position: 'absolute', top: 20, left: 20, width: 120, height: 200, background: 'linear-gradient(90deg, #c0a080 0%, #a08060 100%)', borderRadius: '8px', border: '2px solid #6b4e3a', zIndex: 1 }}>
         <Typography variant="caption" sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: '#f0e0d0', fontWeight: 'bold' }}>Окна</Typography>
       </Box>
-      
+
       <Box sx={{ position: 'absolute', top: 40, right: 30, width: 100, height: 150, background: '#a08060', border: '4px solid #6b4e3a', borderRadius: '4px', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Typography variant="body2" sx={{ color: '#f5e6d3', transform: 'rotate(-90deg)' }}>Картина</Typography>
       </Box>
-      
+
       <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 20, background: '#8b6b4d', zIndex: 2 }} />
-      
+
       <Box sx={{ position: 'absolute', top: 150, left: 200, width: 30, height: 200, background: 'linear-gradient(90deg, #a08060, #6b4e3a)', borderRadius: '8px', zIndex: 2 }} />
       <Box sx={{ position: 'absolute', top: 250, right: 250, width: 30, height: 200, background: 'linear-gradient(90deg, #a08060, #6b4e3a)', borderRadius: '8px', zIndex: 2 }} />
-      
+
       <Box sx={{ position: 'absolute', bottom: 30, left: '50%', transform: 'translateX(-50%)', width: 400, height: 60, background: '#5d3a1a', border: '4px solid #3e2a10', borderRadius: '20px 20px 8px 8px', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Typography variant="body1" sx={{ color: '#f5e6d3', fontFamily: 'Playfair Display, serif' }}>Барная стойка</Typography>
       </Box>
-      
+
       <Box sx={{ position: 'absolute', bottom: 100, right: 50, width: 40, height: 60, background: '#2e7d32', borderRadius: '50% 50% 0 0', border: '2px solid #1b5e20', zIndex: 2 }}>
         <Box sx={{ width: 20, height: 30, background: '#1b5e20', borderRadius: '50%', position: 'absolute', top: -20, left: 10 }} />
       </Box>
 
       <CanvasOverlay
-        tables={tables}
+        tables={filteredTables}
         bookings={bookings}
         filters={filters}
         onTableSelect={onTableSelect}

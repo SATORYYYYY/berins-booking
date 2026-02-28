@@ -119,6 +119,11 @@ USE_TZ = True
 
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
 
+CORS_ALLOW_METHODS = [
+    'GET',
+    'OPTIONS'
+]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
@@ -127,10 +132,13 @@ STATICFILES_DIRS = [
     BASE_DIR / "./static",  
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 JAZZMIN_SETTINGS = {
     "site_title": "Berins ресторан",
     "site_header": "Berins",
-    "welcome_sign": "Добро пожаловать в систему управления рестораном Berins",
+    "welcome_sign": "Добро пожаловать в систему управления ресторанами Berins",
     #"site_logo": "admin/img/berins_logo.png",  
     #"site_logo_mobile": "admin/img/berins_logo_mobile.png",
     "site_url": "/",

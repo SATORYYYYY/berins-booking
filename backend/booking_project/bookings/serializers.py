@@ -1,7 +1,14 @@
 from rest_framework import serializers
-from .models import RestaurantTable, Booking
+from .models import Restaurant, RestaurantTable, Booking
+
+class RestaurantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restaurant
+        fields = '__all__'
 
 class RestaurantTableSerializer(serializers.ModelSerializer):
+    restaurant_name = serializers.CharField(source='restaurant.name', read_only=True)
+
     class Meta:
         model = RestaurantTable
         fields = '__all__'
